@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ICPPCL</class>
+ <widget class="QMainWindow" name="ICPPCL">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>900</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ICPPCL</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QVTKWidget" name="qvtkWidget">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>0</y>
+      <width>1011</width>
+      <height>721</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDockWidget" name="data">
+    <property name="geometry">
+     <rect>
+      <x>9</x>
+      <y>11</y>
+      <width>211</width>
+      <height>461</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="dockWidgetContents_3">
+     <widget class="QTreeWidget" name="dataTree">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>220</width>
+        <height>461</height>
+       </rect>
+      </property>
+      <column>
+       <property name="text">
+        <string notr="true">1</string>
+       </property>
+      </column>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QDockWidget" name="console">
+    <property name="geometry">
+     <rect>
+      <x>-20</x>
+      <y>710</y>
+      <width>1280</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="dockWidgetContents_4">
+     <widget class="QTableWidget" name="consoleTable">
+      <property name="geometry">
+       <rect>
+        <x>259</x>
+        <y>20</y>
+        <width>1301</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <column>
+       <property name="text">
+        <string>Time</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Events</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Detail</string>
+       </property>
+      </column>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1280</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+   </widget>
+   <widget class="QMenu" name="menuSampling">
+    <property name="title">
+     <string>Sampling</string>
+    </property>
+    <addaction name="actionUniform_Sampling"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuSampling"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionUniform_Sampling">
+   <property name="text">
+    <string>Uniform Sampling</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QVTKWidget</class>
+   <extends>QWidget</extends>
+   <header>QVTKWidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
