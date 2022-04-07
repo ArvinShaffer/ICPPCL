@@ -110,8 +110,22 @@
     </property>
     <addaction name="actionUniform_Sampling"/>
    </widget>
+   <widget class="QMenu" name="menuOther">
+    <property name="title">
+     <string>Other</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuFilters">
+    <property name="title">
+     <string>Features</string>
+    </property>
+    <addaction name="actionNormalVector"/>
+    <addaction name="separator"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSampling"/>
+   <addaction name="menuFilters"/>
+   <addaction name="menuOther"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -133,6 +147,11 @@
   <action name="actionUniform_Sampling">
    <property name="text">
     <string>Uniform Sampling</string>
+   </property>
+  </action>
+  <action name="actionNormalVector">
+   <property name="text">
+    <string>NormalVector</string>
    </property>
   </action>
  </widget>

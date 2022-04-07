@@ -11,11 +11,19 @@ ICPPCL::ICPPCL(QWidget *parent)
     //Sampling
     QObject::connect(ui->actionUniform_Sampling, &QAction::triggered, this, &ICPPCL::uniformSampling);
 
+    //features
+    QObject::connect(ui->actionNormalVector, &QAction::triggered, this, &ICPPCL::normalVector);
+
+
     QObject::connect(ui->dataTree, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(itemSelected(QTreeWidgetItem*, int)));
     QObject::connect(ui->dataTree, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(itemPopmenu(const QPoint&)));
 
+
+
     //point cloud initialization
     cloud_now.reset(new PointCloudT);
+
+    ui->dataTree->setContextMenuPolicy(Qt::CustomContextMenu);
 
     //visualization
     viewer.reset(new pcl::visualization::PCLVisualizer("viewer", false));
@@ -26,7 +34,7 @@ ICPPCL::ICPPCL(QWidget *parent)
 
 void ICPPCL::open()
 {
-    QStringList files = QFileDialog::getOpenFileNames(this, tr("Open point cloud file"), QString::fromLocal8Bit(model_dirname.c_str()), tr("Point cloud data(*.pcd *.ply *.obj);;All file(*.*)"));
+    QStringList files = QFileDialog::getOpenFileNames(this, tr("Open point cloud file"), QString::fromLocal8Bit(model_dirname.c_str()), tr("Point cloud data(*.pcd *.ply *.obj *.txt);;All file(*.*)"));
 
     if (files.isEmpty()) return;
 
@@ -54,6 +62,39 @@ void ICPPCL::open()
         else if (file.endsWith(".obj", Qt::CaseInsensitive))
         {
             status = pcl::io::loadOBJFile(file_s, *c_temp);
+        }
+        else if(file.endsWith(".txt", Qt::CaseInsensitive))
+        {
+            std::ifstream fs;
+            pcl::PointXYZRGBA p;
+            std::string line;
+            fs.open(file_s.c_str(), std::ios::binary);
+            if (!fs.is_open() || fs.fail())
+            {
+                PCL_ERROR("could not open file '%s'! Error : '%s' \n", file_s.c_str(), strerror(errno));
+                fs.close();
+                return ;
+            }
+            std::vector<std::string> st;
+
+            while (!fs.eof())
+            {
+                std::getline(fs, line);
+
+                if (line.empty())
+                    continue;
+                boost::trim(line);
+                boost::split(st, line, boost::is_any_of(",\r"), boost::token_compress_on);
+                if (st.size() != 6)
+                    continue;
+
+                p.x = float(atof(st[0].c_str()));
+                p.y = float(atof(st[1].c_str()));
+                p.z = float(atof(st[2].c_str()));
+                c_temp->push_back(p);
+            }
+            fs.close();
+            status = 0;
         }
         else
         {
@@ -288,6 +329,9 @@ void ICPPCL::updatePointcloud()
     for (int i = 0; i != cloud_show.size(); ++i)
     {
         viewer->addPointCloud(cloud_show[i], "cloud " + QString::number(i).toStdString());
+        if (nor_show.find(i) != nor_show.end()) {
+            viewer->addPointCloudNormals<PointT, pcl::Normal>(cloud_show[i], nor_show[i], 10, 0.02, "normals");
+        }
         viewer->updatePointCloud(cloud_show[i], "cloud " + QString::number(i).toStdString());
     }
     updateDataTree();
@@ -305,6 +349,7 @@ void ICPPCL::updateDataTree()
         ui->dataTree->addTopLevelItem(cloudName);
     }
 }
+
 
 void ICPPCL::setCloudAlpha(PointCloudT::Ptr &cloud, unsigned int a)
 {
@@ -346,7 +391,7 @@ void ICPPCL::uniformSampling()
     us.filter(*us_cloud);
 
     Eigen::Affine3f transformation = Eigen::Affine3f::Identity();  //创建平移旋转变换矩阵。本例只演示平移点云。
-    transformation.translation() << 0.1, 0.0, 0.0;   //沿x轴方向平移10m
+    transformation.translation() << 0.2, 0.0, 0.0;   //沿x轴方向平移10m
 
     pcl::transformPointCloud(*us_cloud, *us_cloud, transformation);  //平移点云
 
@@ -357,6 +402,27 @@ void ICPPCL::uniformSampling()
 }
 
 
+
+//Features
+void ICPPCL::normalVector()
+{
+    QTreeWidgetItem* curItem = ui->dataTree->currentItem();
+    if (curItem == NULL) return;
+    int id = ui->dataTree->indexOfTopLevelItem(curItem);
+    pcl::NormalEstimationOMP<PointT, pcl::Normal> n;
+    pcl::PointCloud<pcl::Normal>::Ptr normal(new pcl::PointCloud<pcl::Normal>);
+    pcl::search::KdTree<PointT>::Ptr tree(new pcl::search::KdTree<PointT>());
+    n.setNumberOfThreads(10);
+    n.setInputCloud(cloud_show[id]);
+    n.setSearchMethod(tree);
+    n.setKSearch(10);
+    n.compute(*normal);
+    nor_show[id] = normal;
+    viewer->addPointCloudNormals<PointT, pcl::Normal>(cloud_show[id], normal, 20, 0.02, "normals");
+    //updatePointcloud();
+    //updateNormals();
+    ui->qvtkWidget->update();
+}
 
 
 ICPPCL::~ICPPCL()

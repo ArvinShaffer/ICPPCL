@@ -2,6 +2,8 @@
 #define ICPPCL_H
 
 #include <QMainWindow>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/thread/thread.hpp>
 
 
 // std
@@ -53,6 +55,10 @@
 #include <pcl/sample_consensus/sac_model_sphere.h>
 
 #include <pcl/registration/icp.h>
+#include <pcl/kdtree/kdtree_flann.h>
+#include <pcl/features/normal_3d_omp.h>
+//#include <pcl/features/normal_3d.h>
+
 
 // sampling
 #include<pcl/keypoints/uniform_sampling.h>
@@ -99,6 +105,7 @@ protected:
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
     PointCloudT::Ptr cloud_now;
     std::vector<PointCloudT::Ptr> cloud_show;
+    std::map<int, pcl::PointCloud<pcl::Normal>::Ptr> nor_show;
 
     void open();
 
@@ -122,6 +129,7 @@ public:
     void updatePropertyTable();
     void updateConsoleTable();
     void updateDataTree();
+    void updateNormals();
 
     ~ICPPCL();
 
@@ -137,6 +145,10 @@ public slots:
 
     //Sampling Algorithm
     void uniformSampling();
+
+    //Features
+    void normalVector();
+
 
 
 private:
