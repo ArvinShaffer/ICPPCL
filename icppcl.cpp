@@ -13,6 +13,7 @@ ICPPCL::ICPPCL(QWidget *parent)
 
     //features
     QObject::connect(ui->actionNormalVector, &QAction::triggered, this, &ICPPCL::normalVector);
+    QObject::connect(ui->actionPFH, &QAction::triggered, this, &ICPPCL::pfh);
 
 
     QObject::connect(ui->dataTree, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(itemSelected(QTreeWidgetItem*, int)));
@@ -423,6 +424,36 @@ void ICPPCL::normalVector()
     //updateNormals();
     ui->qvtkWidget->update();
 }
+
+//pfh
+void ICPPCL::pfh()
+{
+    QTreeWidgetItem* curItem = ui->dataTree->currentItem();
+    if (curItem == NULL) return;
+    int id = ui->dataTree->indexOfTopLevelItem(curItem);
+    pcl::NormalEstimationOMP<PointT, pcl::Normal> n;
+    pcl::PointCloud<pcl::Normal>::Ptr normal(new pcl::PointCloud<pcl::Normal>);
+    pcl::search::KdTree<PointT>::Ptr tree(new pcl::search::KdTree<PointT>());
+    n.setNumberOfThreads(10);
+    n.setInputCloud(cloud_show[id]);
+    n.setSearchMethod(tree);
+    n.setKSearch(10);
+    n.compute(*normal);
+    pcl::PFHEstimation<pcl::PointXYZRGBA, pcl::Normal, pcl::PFHSignature125> pfh;
+    pfh.setInputCloud(cloud_show[id]);
+    pfh.setInputNormals(normal);
+    pcl::search::KdTree<pcl::PointXYZRGBA>::Ptr tree2(new pcl::search::KdTree<pcl::PointXYZRGBA>());
+    pfh.setSearchMethod(tree2);
+    pcl::PointCloud<pcl::PFHSignature125>::Ptr pfh_fe_ptr(new pcl::PointCloud<pcl::PFHSignature125>());
+    pfh.setKSearch(5);
+    pfh.compute(*pfh_fe_ptr);
+    cout << "pfh feature size : " << pfh_fe_ptr->points.size() << endl;
+    pcl::visualization::PCLPlotter plotter;
+    plotter.addFeatureHistogram(*pfh_fe_ptr, 300);
+    plotter.plot();
+}
+
+//fpfh
 
 
 ICPPCL::~ICPPCL()

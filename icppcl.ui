@@ -121,6 +121,8 @@
     </property>
     <addaction name="actionNormalVector"/>
     <addaction name="separator"/>
+    <addaction name="actionPFH"/>
+    <addaction name="actionFPFH"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSampling"/>
@@ -152,6 +154,16 @@
   <action name="actionNormalVector">
    <property name="text">
     <string>NormalVector</string>
+   </property>
+  </action>
+  <action name="actionPFH">
+   <property name="text">
+    <string>PFH</string>
+   </property>
+  </action>
+  <action name="actionFPFH">
+   <property name="text">
+    <string>FPFH</string>
    </property>
   </action>
  </widget>

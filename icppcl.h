@@ -63,6 +63,12 @@
 // sampling
 #include<pcl/keypoints/uniform_sampling.h>
 
+// Features
+#include <pcl/features/pfh.h>
+#include <pcl/visualization/pcl_plotter.h>
+
+
+
 //VTK
 #include <vtkActor.h>
 #include <vtkBoxWidget.h>
@@ -148,6 +154,7 @@ public slots:
 
     //Features
     void normalVector();
+    void pfh();
 
 
 
