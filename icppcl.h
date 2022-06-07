@@ -26,7 +26,7 @@
 #include <QColorDialog>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include "QVTKWidget.h"
+#include <QVTKOpenGLNativeWidget.h>
 #include <vtkRenderWindow.h>
 #include <QTextEdit>
 #include <QTime>
@@ -84,9 +84,15 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderer.h>
 #include <vtkTransform.h>
-#include <vtk-8.1/vtkAutoInit.h>
+#include <vtk-9.1/vtkAutoInit.h>
+#include <QVTKOpenGLNativeWidget.h>
+#include <vtkGenericOpenGLRenderWindow.h>
+#include <vtkProperty.h>
+#include <vtkSmartPointer.h>
+
 VTK_MODULE_INIT(vtkRenderingOpenGL2); // VTK was built with vtkRenderingOpenGL2
 VTK_MODULE_INIT(vtkInteractionStyle);
+VTK_MODULE_INIT(vtkRenderingFreeType);
 
 //opencv
 

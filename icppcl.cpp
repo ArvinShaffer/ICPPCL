@@ -26,11 +26,19 @@ ICPPCL::ICPPCL(QWidget *parent)
 
     ui->dataTree->setContextMenuPolicy(Qt::CustomContextMenu);
 
+    vtkNew<vtkGenericOpenGLRenderWindow> renderWindow;
+    vtkNew<vtkRenderer> renderer;
+    renderWindow->AddRenderer(renderer);
     //visualization
-    viewer.reset(new pcl::visualization::PCLVisualizer("viewer", false));
-    ui->qvtkWidget->SetRenderWindow(viewer->getRenderWindow());
-    viewer->setupInteractor(ui->qvtkWidget->GetInteractor(), ui->qvtkWidget->GetRenderWindow());
-    ui->qvtkWidget->update();
+    //viewer.reset(new pcl::visualization::PCLVisualizer("viewer", false));
+    viewer.reset(new pcl::visualization::PCLVisualizer(renderer, renderWindow, "viewer", false));
+
+    ui->openGLWidget->setRenderWindow(viewer->getRenderWindow());
+    viewer->setupInteractor(ui->openGLWidget->GetInteractor(), ui->openGLWidget->GetRenderWindow());
+    ui->openGLWidget->update();
+    //ui->qvtkWidget->SetRenderWindow(viewer->getRenderWindow());
+    //viewer->setupInteractor(ui->qvtkWidget->GetInteractor(), ui->qvtkWidget->GetRenderWindow());
+    //ui->qvtkWidget->update();
 }
 
 void ICPPCL::open()
@@ -138,7 +146,7 @@ void ICPPCL::itemSelected(QTreeWidgetItem* item, int count)
         int cloud_id = ui->dataTree->indexOfTopLevelItem(itemList[i]);
         viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "cloud" + QString::number(cloud_id).toStdString());
     }
-    ui->qvtkWidget->update();
+    ui->openGLWidget->update();
     setConsole("itemSelected", QString::number(selected_item_count) + " item(s) selected.");
 }
 
@@ -235,7 +243,7 @@ void ICPPCL::pointcolorRandom()
         setConsole("Change cloud color", "to random color." );
     }
     updatePointcloud();
-    ui->qvtkWidget->update();
+    ui->openGLWidget->update();
 }
 
 void ICPPCL::pointShow()
@@ -256,7 +264,7 @@ void ICPPCL::pointShow()
         setConsole("Hide", "");
     }
     updatePointcloud();
-    ui->qvtkWidget->update();
+    ui->openGLWidget->update();
 }
 
 
@@ -281,7 +289,7 @@ void ICPPCL::pointHide()
         setConsole("Hide", "");
     }
     updatePointcloud();
-    ui->qvtkWidget->update();
+    ui->openGLWidget->update();
 }
 
 
@@ -399,7 +407,7 @@ void ICPPCL::uniformSampling()
 
     cloud_show.push_back(us_cloud);
     updatePointcloud();
-    ui->qvtkWidget->update();
+    ui->openGLWidget->update();
 }
 
 
@@ -422,7 +430,7 @@ void ICPPCL::normalVector()
     viewer->addPointCloudNormals<PointT, pcl::Normal>(cloud_show[id], normal, 20, 0.02, "normals");
     //updatePointcloud();
     //updateNormals();
-    ui->qvtkWidget->update();
+    ui->openGLWidget->update();
 }
 
 //pfh
