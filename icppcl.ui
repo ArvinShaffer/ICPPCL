@@ -17,8 +17,8 @@
    <widget class="QDockWidget" name="data">
     <property name="geometry">
      <rect>
-      <x>9</x>
-      <y>11</y>
+      <x>30</x>
+      <y>30</y>
       <width>211</width>
       <height>461</height>
      </rect>
@@ -27,7 +27,7 @@
      <widget class="QTreeWidget" name="dataTree">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>20</x>
         <y>0</y>
         <width>220</width>
         <height>461</height>
@@ -44,8 +44,8 @@
    <widget class="QDockWidget" name="console">
     <property name="geometry">
      <rect>
-      <x>-20</x>
-      <y>710</y>
+      <x>-10</x>
+      <y>540</y>
       <width>1280</width>
       <height>181</height>
      </rect>
@@ -54,8 +54,8 @@
      <widget class="QTableWidget" name="consoleTable">
       <property name="geometry">
        <rect>
-        <x>259</x>
-        <y>20</y>
+        <x>230</x>
+        <y>0</y>
         <width>1301</width>
         <height>191</height>
        </rect>
@@ -82,9 +82,9 @@
     <property name="geometry">
      <rect>
       <x>260</x>
-      <y>10</y>
-      <width>981</width>
-      <height>701</height>
+      <y>30</y>
+      <width>721</width>
+      <height>471</height>
      </rect>
     </property>
    </widget>
